@@ -62,7 +62,7 @@ $ export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
 #### Step 5 - Install Bazel {{% bazelVersion %}}
 
 ```bash
-wget -O /tmp/bazel.sh https://github.com/bazelbuild/bazel/releases/download/0.26.0/bazel-0.26.0-installer-linux-x86_64.sh
+wget -O /tmp/bazel.sh https://github.com/bazelbuild/bazel/releases/download/0.29.1/bazel-0.29.1-installer-linux-x86_64.sh
 chmod +x /tmp/bazel.sh
 /tmp/bazel.sh --user
 ```
@@ -185,7 +185,7 @@ $ export JAVA_HOME=/usr/lib/jvm/java-11-openjdk
 #### Step 5 - Install Bazel {{% bazelVersion %}}
 
 ```bash
-wget -O /tmp/bazel.sh https://github.com/bazelbuild/bazel/releases/download/0.26.0/bazel-0.26.0-installer-linux-x86_64.sh
+wget -O /tmp/bazel.sh https://github.com/bazelbuild/bazel/releases/download/0.29.1/bazel-0.29.1-installer-linux-x86_64.sh
 chmod +x /tmp/bazel.sh
 /tmp/bazel.sh --user
 ```
