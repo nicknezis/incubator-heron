@@ -19,6 +19,7 @@
 
 package org.apache.heron.scheduler.kubernetes;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -40,6 +41,8 @@ import org.apache.heron.scheduler.utils.SchedulerUtils.ExecutorPort;
 import org.apache.heron.spi.common.Config;
 import org.apache.heron.spi.packing.PackingPlan;
 import org.apache.heron.spi.packing.Resource;
+
+import okhttp3.Response;
 
 import io.kubernetes.client.custom.Quantity;
 import io.kubernetes.client.custom.V1Patch;
@@ -192,22 +195,27 @@ public class AppsV1Controller extends KubernetesController {
 
   boolean deleteStatefulSet() {
     try {
-      final V1Status response = client.deleteNamespacedStatefulSet(getTopologyName(),
+      final Response response = client.deleteNamespacedStatefulSetCall(getTopologyName(),
           getNamespace(), null, null, 0, null,
-          KubernetesConstants.DELETE_OPTIONS_PROPAGATION_POLICY, null);
+          KubernetesConstants.DELETE_OPTIONS_PROPAGATION_POLICY, null, null).execute();
 
-      if (V1STATUS_FAILURE.equals(response.getStatus())) {
-        LOG.log(Level.SEVERE, "Error killing topology message: " + response.toString());
-
+      if (response.isSuccessful()) {
+        LOG.log(Level.INFO, "StatefulSet for the Job [" + getTopologyName() +
+            "] in namespace [" + getNamespace() + "] is deleted.");
+        return true;
+      } else {
+        LOG.log(Level.SEVERE, "Error when deleting the StatefulSet of the job ["
+            + getTopologyName() + "]: in namespace [" + getNamespace() + "]");
+        LOG.log(Level.SEVERE, "Error killing topology message: " + response.message());
+        KubernetesUtils.logResponseBodyIfPresent(LOG, response);
+    
         throw new TopologyRuntimeManagementException(
             KubernetesUtils.errorMessageFromResponse(response));
       }
-    } catch (ApiException e) {
+    } catch (IOException | ApiException e) {
       KubernetesUtils.logExceptionWithDetails(LOG, "Error deleting topology", e);
       return false;
     }
-
-    return true;
   }
 
   boolean isStatefulSet() {
