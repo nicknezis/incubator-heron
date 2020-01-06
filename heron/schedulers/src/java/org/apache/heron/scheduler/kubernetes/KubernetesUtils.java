@@ -22,6 +22,8 @@ package org.apache.heron.scheduler.kubernetes;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import okhttp3.Response;
+
 import org.apache.heron.common.basics.ByteAmount;
 import org.apache.heron.scheduler.utils.Runtime;
 import org.apache.heron.spi.common.Config;
@@ -54,6 +56,10 @@ final class KubernetesUtils {
   }
 
   static String errorMessageFromResponse(V1Status response) {
+    return response.toString();
+  }
+
+  static String errorMessageFromResponse(Response response) {
     return response.toString();
   }
 

@@ -19,8 +19,11 @@
 
 package org.apache.heron.scheduler.kubernetes;
 
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import okhttp3.Response;
 
 import org.apache.heron.scheduler.TopologyRuntimeManagementException;
 
@@ -40,25 +43,41 @@ public class KubernetesCompat {
     // old version deployed topologies as naked pods
     try {
       final String labelSelector = KubernetesConstants.LABEL_TOPOLOGY + "=" + topology;
-      final V1Status response =
-          client.deleteCollectionNamespacedPod(namespace, null, null, null, null, null,
+      final Response response =
+          client.deleteCollectionNamespacedPodCall(namespace, null, null, null, null, null,
             null, labelSelector, null, null,
             KubernetesConstants.DELETE_OPTIONS_PROPAGATION_POLICY,
-            null, null, null, null);
-      if (V1STATUS_FAILURE.equals(response.getStatus())) {
-        LOG.log(Level.SEVERE, "Error killing topology message: " + response.toString());
+            null, null, null, null, null).execute();
+      
+            if (response.isSuccessful()) {
+              LOG.log(Level.INFO, "Pods for the Job [" + topology + 
+                  "] in namespace [" + namespace + "] are deleted.");
+              return true;
+            } else {
+              if (response.code() == 404 && response.message().equals("Not Found")) {
+                LOG.log(Level.SEVERE, "There are no Pods for the job [" + topology
+                    + "] to delete on Kubernetes master. They may have already terminated.");
+                return true;
+              }
+      
+              LOG.log(Level.SEVERE, "Error when deleting the Pods of the job ["
+                  + topology + "]: in namespace [" + namespace + "]: " + response);
+              throw new TopologyRuntimeManagementException(
+                  KubernetesUtils.errorMessageFromResponse(response));
+            }
+  
+      // if (V1STATUS_FAILURE.equals(response.getStatus())) {
+      //   LOG.log(Level.SEVERE, "Error killing topology message: " + response.toString());
 
-        throw new TopologyRuntimeManagementException(
-            KubernetesUtils.errorMessageFromResponse(response));
-      }
-    } catch (ApiException e) {
+      //   throw new TopologyRuntimeManagementException(
+      //       KubernetesUtils.errorMessageFromResponse(response));
+      // }
+    } catch (IOException | ApiException e) {
       LOG.log(Level.SEVERE, "Error killing topology " + e.getMessage());
       if (e instanceof ApiException) {
         LOG.log(Level.SEVERE, "Error details:\n" +  ((ApiException) e).getResponseBody());
       }
       return false;
     }
-
-    return true;
   }
 }

@@ -19,6 +19,7 @@
 
 package org.apache.heron.scheduler.kubernetes;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -30,6 +31,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+// import com.google.gson.Gson;
+// import com.google.gson.JsonElement;
+// import com.google.gson.JsonObject;
+import okhttp3.Response;
 
 import org.apache.heron.api.utils.TopologyUtils;
 import org.apache.heron.scheduler.TopologyRuntimeManagementException;
@@ -192,22 +198,40 @@ public class AppsV1Controller extends KubernetesController {
 
   boolean deleteStatefulSet() {
     try {
-      final V1Status response = client.deleteNamespacedStatefulSet(getTopologyName(),
+      final Response response = client.deleteNamespacedStatefulSetCall(getTopologyName(),
           getNamespace(), null, null, 0, null,
-          KubernetesConstants.DELETE_OPTIONS_PROPAGATION_POLICY, null);
+          KubernetesConstants.DELETE_OPTIONS_PROPAGATION_POLICY, null, null).execute();
 
-      if (V1STATUS_FAILURE.equals(response.getStatus())) {
-        LOG.log(Level.SEVERE, "Error killing topology message: " + response.toString());
+          if (response.isSuccessful()) {
+            LOG.log(Level.INFO, "StatefulSet for the Job [" + getTopologyName() + 
+                "] in namespace [" + getNamespace() + "] is deleted.");
+            return true;
+          } else {
+          // if (!response.isSuccessful()) {
+            if (response.code() == 404 && response.message().equals("Not Found")) {
+              LOG.log(Level.SEVERE, "There is no StatefulSet for the Job [" + getTopologyName()
+                  + "] to delete on Kubernetes master. It may have already terminated.");
+              return true;
+            }
+    
+            LOG.log(Level.SEVERE, "Error when deleting the StatefulSet of the job ["
+                + getTopologyName() + "]: in namespace [" + getNamespace() + "]: " + response);
+            throw new TopologyRuntimeManagementException(
+                KubernetesUtils.errorMessageFromResponse(response));
+          }
+    
+      // if (V1STATUS_FAILURE.equals(response.getStatus())) {
+      //   LOG.log(Level.SEVERE, "Error killing topology message: " + response.toString());
 
-        throw new TopologyRuntimeManagementException(
-            KubernetesUtils.errorMessageFromResponse(response));
-      }
-    } catch (ApiException e) {
+      //   throw new TopologyRuntimeManagementException(
+      //       KubernetesUtils.errorMessageFromResponse(response));
+      // }
+    } catch (IOException | ApiException e) {
       KubernetesUtils.logExceptionWithDetails(LOG, "Error deleting topology", e);
       return false;
     }
 
-    return true;
+    // return true;
   }
 
   boolean isStatefulSet() {
