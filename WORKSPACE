@@ -35,6 +35,20 @@ jetty_version = "9.4.6.v20170531"
 jersey_verion = "2.25.1"
 hk2_api = "2.5.0-b32"
 
+RULES_JVM_EXTERNAL_TAG = "3.1"
+RULES_JVM_EXTERNAL_SHA = "e246373de2353f3d34d35814947aa8b7d0dd1a58c2f7a6c41cfeaff3007c2d14"
+
+http_archive(
+    name = "rules_jvm_external",
+    strip_prefix = "rules_jvm_external-%s" % RULES_JVM_EXTERNAL_TAG,
+    sha256 = RULES_JVM_EXTERNAL_SHA,
+    url = "https://github.com/bazelbuild/rules_jvm_external/archive/%s.zip" % RULES_JVM_EXTERNAL_TAG,
+)
+
+load("@rules_jvm_external//:defs.bzl", "maven_install")
+load("@rules_jvm_external//migration:maven_jar_migrator_deps.bzl", "maven_jar_migrator_repositories")
+maven_jar_migrator_repositories()
+
 maven_server(
   name = "default",
   url = "https://repo1.maven.org/maven2/",
@@ -67,12 +81,12 @@ maven_jar(
 
 maven_jar(
   name = "com_amazonaws_aws_java_sdk_core",
-  artifact = "com.amazonaws:aws-java-sdk-core:" + aws_version,
+  artifact = "com.amazonaws:aws-java-sdk-core:1.11.58"
 )
 
 maven_jar(
   name = "com_amazonaws_aws_java_sdk_s3",
-  artifact = "com.amazonaws:aws-java-sdk-s3:" + aws_version,
+  artifact = "com.amazonaws:aws-java-sdk-s3:1.11.58"
 )
 
 maven_jar(
@@ -127,22 +141,22 @@ maven_jar(
 
 maven_jar(
   name = "org_apache_curator_curator_client",
-  artifact = "org.apache.curator:curator-client:" + curator_version,
+  artifact = "org.apache.curator:curator-client:2.9.0",
 )
 
 maven_jar(
   name = "org_apache_curator_curator_framework",
-  artifact = "org.apache.curator:curator-framework:" + curator_version,
+  artifact = "org.apache.curator:curator-framework:2.9.0",
 )
 
 maven_jar(
   name = "org_apache_curator_curator_recipes",
-  artifact = "org.apache.curator:curator-recipes:" + curator_version,
+  artifact = "org.apache.curator:curator-recipes:2.9.0",
 )
 
 maven_jar(
   name = "org_apache_curator_curator_test",
-  artifact = "org.apache.curator:curator-test:" + curator_version,
+  artifact = "org.apache.curator:curator-test:2.9.0",
 )
 
 maven_jar(
@@ -172,7 +186,7 @@ maven_jar(
 
 maven_jar(
   name = "org_apache_httpcomponents_http_client",
-  artifact = "org.apache.httpcomponents:httpclient:" + http_client_version,
+  artifact = "org.apache.httpcomponents:httpclient:4.5.2",
 )
 
 http_jar(
@@ -193,17 +207,17 @@ maven_jar(
 
 maven_jar(
   name = "com_fasterxml_jackson_core_jackson_annotations",
-  artifact = "com.fasterxml.jackson.core:jackson-annotations:" + jackson_version,
+  artifact = "com.fasterxml.jackson.core:jackson-annotations:2.8.8",
 )
 
 maven_jar(
   name = "com_fasterxml_jackson_core_jackson_core",
-  artifact = "com.fasterxml.jackson.core:jackson-core:" + jackson_version,
+  artifact = "com.fasterxml.jackson.core:jackson-core:2.8.8",
 )
 
 maven_jar(
   name = "com_fasterxml_jackson_core_jackson_databind",
-  artifact = "com.fasterxml.jackson.core:jackson-databind:" + jackson_version,
+  artifact = "com.fasterxml.jackson.core:jackson-databind:2.8.8",
 )
 
 maven_jar(
@@ -348,67 +362,67 @@ maven_jar(
 
 maven_jar(
   name = "org_powermock_powermock_api_mockito",
-  artifact = "org.powermock:powermock-api-mockito:" + powermock_version,
+  artifact = "org.powermock:powermock-api-mockito:1.6.2",
 )
 
 maven_jar(
   name = "org_powermock_powermock_api_support",
-  artifact = "org.powermock:powermock-api-support:" + powermock_version,
+  artifact = "org.powermock:powermock-api-support:1.6.2",
 )
 
 maven_jar(
   name = "org_powermock_powermock_core",
-  artifact = "org.powermock:powermock-core:" + powermock_version,
+  artifact = "org.powermock:powermock-core:1.6.2",
 )
 
 maven_jar(
   name = "org_powermock_powermock_module_junit4",
-  artifact = "org.powermock:powermock-module-junit4:" + powermock_version,
+  artifact = "org.powermock:powermock-module-junit4:1.6.2",
 )
 
 maven_jar(
   name = "org_powermock_powermock_module_junit4_common",
-  artifact = "org.powermock:powermock-module-junit4-common:" + powermock_version,
+  artifact = "org.powermock:powermock-module-junit4-common:1.6.2",
 )
 
 maven_jar(
   name = "org_powermock_powermock_reflect",
-  artifact = "org.powermock:powermock-reflect:" + powermock_version,
+  artifact = "org.powermock:powermock-reflect:1.6.2",
 )
 
 maven_jar(
   name = "org_apache_reef_reef_common",
-  artifact = "org.apache.reef:reef-common:" + reef_version
+  artifact = "org.apache.reef:reef-common:0.14.0"
 )
 
 maven_jar(
   name = "org_apache_reef_reef_runtime_local",
-  artifact = "org.apache.reef:reef-runtime-local:" + reef_version
+  artifact = "org.apache.reef:reef-runtime-local:0.14.0"
 )
 
 maven_jar(
   name = "org_apache_reef_reef_runtime_yarn",
-  artifact = "org.apache.reef:reef-runtime-yarn:" + reef_version
+  artifact = "org.apache.reef:reef-runtime-yarn:0.14.0"
 )
 
 maven_jar(
   name = "org_apache_reef_reef_utils",
-  artifact = "org.apache.reef:reef-utils:" + reef_version
+  artifact = "org.apache.reef:reef-utils:0.14.0"
 )
 
 maven_jar(
   name = "org_apache_reef_tang",
-  artifact = "org.apache.reef:tang:" + reef_version
+  artifact = "org.apache.reef:tang:0.14.0"
 )
 
 maven_jar(
   name = "org_slf4j_slf4j_api",
-  artifact = "org.slf4j:slf4j-api:" + slf4j_version
+  artifact = "org.slf4j:slf4j-api:1.7.7"
 )
 
 maven_jar(
   name = "org_slf4j_slf4j_jdk14",
-  artifact = "org.slf4j:slf4j-jdk14:" + slf4j_version
+  artifact = "org.slf4j:slf4j-jdk14:1.7.7"
 )
 
 maven_jar(
@@ -424,7 +438,7 @@ maven_jar(
 
 maven_jar(
   name = "org_apache_reef_wake",
-  artifact = "org.apache.reef:wake:" + reef_version
+  artifact = "org.apache.reef:wake:0.14.0"
 )
 
 maven_jar(
@@ -505,27 +519,27 @@ maven_jar(
 # Google Cloud
 maven_jar(
   name = "google_api_services_storage",
-  artifact = "com.google.apis:google-api-services-storage:v1-rev108-" + google_client_version
+  artifact = "com.google.apis:google-api-services-storage:v1-rev108-1.22.0"
 )
 
 maven_jar(
   name = "google_api_client",
-  artifact = "com.google.api-client:google-api-client:" + google_client_version
+  artifact = "com.google.api-client:google-api-client:1.22.0"
 )
 
 maven_jar(
   name = "google_http_client",
-  artifact = "com.google.http-client:google-http-client:" + google_client_version
+  artifact = "com.google.http-client:google-http-client:1.22.0"
 )
 
 maven_jar(
   name = "google_http_client_jackson2",
-  artifact = "com.google.http-client:google-http-client-jackson2:" + google_client_version
+  artifact = "com.google.http-client:google-http-client-jackson2:1.22.0"
 )
 
 maven_jar(
   name = "google_oauth_client",
-  artifact = "com.google.oauth-client:google-oauth-client:" + google_client_version
+  artifact = "com.google.oauth-client:google-oauth-client:1.22.0"
 )
 # end Google Cloud
 
@@ -542,12 +556,12 @@ squareup_okhttp_version = "3.14.5"
 
 maven_jar(
   name = "kubernetes_java_client",
-  artifact = "io.kubernetes:client-java:" + kubernetes_client_version
+  artifact = "io.kubernetes:client-java:7.0.0"
 )
 
 maven_jar(
   name = "kubernetes_java_client_api",
-  artifact = "io.kubernetes:client-java-api:" + kubernetes_client_version
+  artifact = "io.kubernetes:client-java-api:7.0.0"
 )
 
 maven_jar(
@@ -557,7 +571,7 @@ maven_jar(
 
 maven_jar(
   name = "squareup_okhttp",
-  artifact = "com.squareup.okhttp3:okhttp:" + squareup_okhttp_version
+  artifact = "com.squareup.okhttp3:okhttp:3.14.5"
 )
 maven_jar(
   name = "squareup_okio",
@@ -565,7 +579,7 @@ maven_jar(
 )
 maven_jar(
   name = "squareup_okhttp_logging_interceptor",
-  artifact = "com.squareup.okhttp3:logging-interceptor:" + squareup_okhttp_version
+  artifact = "com.squareup.okhttp3:logging-interceptor:3.14.5"
 )
 
 maven_jar(
@@ -580,7 +594,7 @@ maven_jar(
 
 maven_jar(
   name = "kubernetes_java_client_proto",
-  artifact = "io.kubernetes:client-java-proto:" + kubernetes_client_version
+  artifact = "io.kubernetes:client-java-proto:7.0.0"
 )
 
 # end Kubernetes java client
@@ -589,42 +603,42 @@ maven_jar(
 # jetty
 maven_jar(
   name = "org_eclipse_jetty_server",
-  artifact = "org.eclipse.jetty:jetty-server:" + jetty_version
+  artifact = "org.eclipse.jetty:jetty-server:9.4.6.v20170531"
 )
 
 maven_jar(
   name = "org_eclipse_jetty_http",
-  artifact = "org.eclipse.jetty:jetty-http:" + jetty_version
+  artifact = "org.eclipse.jetty:jetty-http:9.4.6.v20170531"
 )
 
 maven_jar(
   name = "org_eclipse_jetty_util",
-  artifact = "org.eclipse.jetty:jetty-util:" + jetty_version
+  artifact = "org.eclipse.jetty:jetty-util:9.4.6.v20170531"
 )
 
 maven_jar(
   name = "org_eclipse_jetty_io",
-  artifact = "org.eclipse.jetty:jetty-io:" + jetty_version
+  artifact = "org.eclipse.jetty:jetty-io:9.4.6.v20170531"
 )
 
 maven_jar(
   name = "org_eclipse_jetty_security",
-  artifact = "org.eclipse.jetty:jetty-security:" + jetty_version
+  artifact = "org.eclipse.jetty:jetty-security:9.4.6.v20170531"
 )
 
 maven_jar(
   name = "org_eclipse_jetty_servlet",
-  artifact = "org.eclipse.jetty:jetty-servlet:" + jetty_version
+  artifact = "org.eclipse.jetty:jetty-servlet:9.4.6.v20170531"
 )
 
 maven_jar(
   name = "org_eclipse_jetty_servlets",
-  artifact = "org.eclipse.jetty:jetty-servlets:" + jetty_version
+  artifact = "org.eclipse.jetty:jetty-servlets:9.4.6.v20170531"
 )
 
 maven_jar(
   name = "org_eclipse_jetty_continuation",
-  artifact = "org.eclipse.jetty:jetty-continuation:" + jetty_version
+  artifact = "org.eclipse.jetty:jetty-continuation:9.4.6.v20170531"
 )
 
 maven_jar(
@@ -636,42 +650,42 @@ maven_jar(
 # jersey
 maven_jar(
   name = "jersey_container_servlet_core",
-  artifact = "org.glassfish.jersey.containers:jersey-container-servlet-core:" + jersey_verion
+  artifact = "org.glassfish.jersey.containers:jersey-container-servlet-core:2.25.1"
 )
 
 maven_jar(
   name = "jersey_container_servlet",
-  artifact = "org.glassfish.jersey.containers:jersey-container-servlet:" + jersey_verion
+  artifact = "org.glassfish.jersey.containers:jersey-container-servlet:2.25.1"
 )
 
 maven_jar(
   name = "jersey_server",
-  artifact = "org.glassfish.jersey.core:jersey-server:" + jersey_verion
+  artifact = "org.glassfish.jersey.core:jersey-server:2.25.1"
 )
 
 maven_jar(
   name = "jersey_client",
-  artifact = "org.glassfish.jersey.core:jersey-client:" + jersey_verion
+  artifact = "org.glassfish.jersey.core:jersey-client:2.25.1"
 )
 
 maven_jar(
   name = "jersey_common",
-  artifact = "org.glassfish.jersey.core:jersey-common:jar:" + jersey_verion
+  artifact = "org.glassfish.jersey.core:jersey-common:jar:2.25.1"
 )
 
 maven_jar(
   name = "jersey_media_multipart",
-  artifact = "org.glassfish.jersey.media:jersey-media-multipart:" + jersey_verion
+  artifact = "org.glassfish.jersey.media:jersey-media-multipart:2.25.1"
 )
 
 maven_jar(
   name = "jersey_media_jaxb",
-  artifact = "org.glassfish.jersey.media:jersey-media-jaxb:" + jersey_verion
+  artifact = "org.glassfish.jersey.media:jersey-media-jaxb:2.25.1"
 )
 
 maven_jar(
   name = "jersey_guava",
-  artifact = "org.glassfish.jersey.bundles.repackaged:jersey-guava:" + jersey_verion
+  artifact = "org.glassfish.jersey.bundles.repackaged:jersey-guava:2.25.1"
 )
 # end jersey
 
@@ -697,22 +711,22 @@ maven_jar(
 
 maven_jar(
   name = "hk2_api",
-  artifact = "org.glassfish.hk2:hk2-api:" + hk2_api
+  artifact = "org.glassfish.hk2:hk2-api:2.5.0-b32"
 )
 
 maven_jar(
   name = "hk2_utils",
-  artifact = "org.glassfish.hk2:hk2-utils:" + hk2_api
+  artifact = "org.glassfish.hk2:hk2-utils:2.5.0-b32"
 )
 
 maven_jar(
   name = "hk2_aopalliance_repackaged",
-  artifact = "org.glassfish.hk2.external:aopalliance-repackaged:" + hk2_api
+  artifact = "org.glassfish.hk2.external:aopalliance-repackaged:2.5.0-b32"
 )
 
 maven_jar(
   name = "hk2_locator",
-  artifact = "org.glassfish.hk2:hk2-locator:" + hk2_api
+  artifact = "org.glassfish.hk2:hk2-locator:2.5.0-b32"
 )
 
 maven_jar(
@@ -738,7 +752,7 @@ maven_jar(
 # bookkeeper & distributedlog dependencies
 maven_jar(
   name = "org_apache_distributedlog_core",
-  artifact = "org.apache.distributedlog:distributedlog-core-shaded:" + distributedlog_version
+  artifact = "org.apache.distributedlog:distributedlog-core-shaded:4.7.3"
 )
 # end bookkeeper & distributedlog dependencies
 
