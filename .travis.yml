@@ -2,12 +2,12 @@
 
 # sudo: required
 
-dist: bionic
+dist: xenial
 
 language: java
 
 jdk:
-  - oraclejdk9
+  - oraclejdk8
 
 addons:
   apt:
