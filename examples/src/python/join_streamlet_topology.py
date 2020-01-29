@@ -22,10 +22,15 @@
 
 import sys
 
+import Builder
+import Runner
+import Config
+import WindowConfig
 from heronpy.streamlet.builder import Builder
 from heronpy.streamlet.runner import Runner
 from heronpy.streamlet.config import Config
 from heronpy.streamlet.windowconfig import WindowConfig
+
 from heronpy.connectors.mock.arraylooper import ArrayLooper
 
 # pylint: disable=superfluous-parens

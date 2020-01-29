@@ -22,11 +22,16 @@
 
 import logging
 
-from heronpy.api.custom_grouping import ICustomGrouping
+import ICustomGrouping
+import Topology
+import Grouping
 import heronpy.api.api_constants as constants
+from heronpy.api.custom_grouping import ICustomGrouping
 from heronpy.api.topology import Topology
 from heronpy.api.stream import Grouping
 
+import WordSpout
+import ConsumeBolt
 from examples.src.python.spout import WordSpout
 from examples.src.python.bolt import ConsumeBolt
 

@@ -6,5 +6,5 @@ pex_binary(
     name = "pylint",
     srcs = ["main.py"],
     main = "main.py",
-    reqs = ["pylint==1.5.5"],
+    reqs = ["pylint==1.6.5"],
 )

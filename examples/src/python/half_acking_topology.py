@@ -21,10 +21,14 @@
 '''Example HalfAckingTopology'''
 import sys
 
-import heronpy.api.api_constants as constants
+import TopologyBuilder
+import Grouping
 from heronpy.api.topology import TopologyBuilder
 from heronpy.api.stream import Grouping
+import heronpy.api.api_constants as constants
 
+import WordSpout
+import HalfAckBolt
 from examples.src.python.spout import WordSpout
 from examples.src.python.bolt import HalfAckBolt
 

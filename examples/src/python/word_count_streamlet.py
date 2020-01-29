@@ -21,10 +21,15 @@
 '''Example WordCountStreamletTopology'''
 import sys
 
+import Builder
 from heronpy.streamlet.builder import Builder
+import Runner
 from heronpy.streamlet.runner import Runner
+import Config
 from heronpy.streamlet.config import Config
+import WindowConfig
 from heronpy.streamlet.windowconfig import WindowConfig
+import ArrayLooper
 from heronpy.connectors.mock.arraylooper import ArrayLooper
 
 # pylint: disable=superfluous-parens

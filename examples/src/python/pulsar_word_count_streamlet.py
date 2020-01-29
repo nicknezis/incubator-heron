@@ -21,6 +21,8 @@
 '''Example WordCountStreamletTopology'''
 import sys
 
+import TimeWindow
+import PulsarStreamlet
 from heronpy.streamlet.streamlet import TimeWindow
 from heronpy.connectors.pulsar.pulsarstreamlet import PulsarStreamlet
 

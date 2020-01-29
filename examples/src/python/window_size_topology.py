@@ -21,10 +21,16 @@
 '''Example WindowSizeTopology'''
 import sys
 
-import heronpy.api.api_constants as constants
+import TopologyBuilder
+import Grouping
+import SlidingWindowBolt
 from heronpy.api.topology import TopologyBuilder
 from heronpy.api.stream import Grouping
 from heronpy.api.bolt.window_bolt import SlidingWindowBolt
+import heronpy.api.api_constants as constants
+
+import WordSpout
+import WindowSizeBolt
 from heron.examples.src.python.spout import WordSpout
 from examples.src.python.bolt import WindowSizeBolt
 

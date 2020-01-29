@@ -20,10 +20,15 @@
 
 '''module for example topology: CustomGroupingTopology'''
 
-import heronpy.api.api_constants as constants
+import Topology
+import Grouping
 from heronpy.api.topology import Topology
 from heronpy.api.stream import Grouping
+import heronpy.api.api_constants as constants
 
+import MultiStreamSpout
+import CountBolt
+import StreamAggregateBolt
 from examples.src.python.spout import MultiStreamSpout
 from examples.src.python.bolt import CountBolt, StreamAggregateBolt
 
