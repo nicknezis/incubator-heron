@@ -24,6 +24,7 @@ import argparse
 import atexit
 import base64
 import functools
+import itertools
 import json
 import os
 import random
@@ -34,10 +35,9 @@ import sys
 import stat
 import threading
 import time
-import yaml
 import socket
 import traceback
-import itertools
+import yaml
 
 from heron.common.src.python.utils import log
 from heron.common.src.python.utils import proc
